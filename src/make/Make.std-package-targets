@@ -88,13 +88,16 @@ else
                      -e "s%Nuclear/NuclearModelI.h%Interfaces/NuclearModelI.h%g" \
 	             -e "s%$(GENIE_LIB_PATH)/%%g" \
 	     $(PACKAGE_ROOTMAP)
+	   
+	   $(COPY) $(PACKAGE_PCM) $(GENIE_LIB_PATH)  
+	   $(COPY) $(PACKAGE_ROOTMAP) $(GENIE_LIB_PATH)
 endif
 
 #
 #
 
 $(PACKAGE_LIB_WITH_PATH): $(LIB_DEPEND)
-	@echo "[package: $(PACKAGE)] Generating shared library ..dictionary=.$(DICTIONARY)"
+	@echo "[package: $(PACKAGE)] Generating shared and static libraries ..dictionary=.$(DICTIONARY)"
 ifeq ($(strip $(DICTIONARY)),undefined)
 	$(SOCMD) $(SOFLAGS) $(SOMINF) $(PACKAGE_OBJECTS) $(LIBRARIES) $(EXTRA_EXT_LIBS) $(OutPutOpt) $(PACKAGE_LIB_WITH_PATH)
 else
@@ -105,7 +108,9 @@ else
 	[ ! -f $(PACKAGE_ROOTMAP) ] || $(COPY) $(PACKAGE_ROOTMAP) $(GENIE_LIB_PATH)
 endif
 
-lib: $(PACKAGE_LIB_WITH_PATH)
+lib: $(if $(MEGALIB), , $(PACKAGE_LIB_WITH_PATH))
+	@echo MEGALIB=$(MEGALIB)
+#lib: $(PACKAGE_LIB_WITH_PATH)
 
 $(PACKAGE_LIBMACLINK_WITH_PATH): $(PACKAGE_LIB_WITH_PATH)
 ifeq ($(strip $(IS_MACOSX)),YES)
@@ -121,7 +126,8 @@ endif
 
 #
 #
-lib-link: $(PACKAGE_LIBNOVRS_WITH_PATH) $(PACKAGE_LIBMACLINK_WITH_PATH)
+lib-link: $(if $(MEGALIB), , $(PACKAGE_LIBNOVRS_WITH_PATH) $(PACKAGE_LIBMACLINK_WITH_PATH))
+#lib-link: $(PACKAGE_LIBNOVRS_WITH_PATH) $(PACKAGE_LIBMACLINK_WITH_PATH)
 
 
 #

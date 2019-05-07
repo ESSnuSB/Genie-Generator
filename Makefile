@@ -42,8 +42,21 @@ INSTALL_TARGETS =  print-makeinstall-info \
 
 # define targets
 
+#just-libs: $(INITIAL_BUILD_TARGETS)
+#all:     $(FINAL_BUILD_TARGETS)
 all:     $(FINAL_BUILD_TARGETS)
 install: $(INSTALL_TARGETS)
+
+megalib-create : $(INITIAL_BUILD_TARGETS)
+	@echo "Building the megalib."
+	cd ${GENIE}/src/ && \
+	g++ -shared `find -name *.o | grep -v 'Apps'` ${LIBRARIES} -o ${GENIE}/lib/libGenie.so && \
+  cd ${GENIE}
+
+megalib: MEGALIB=true
+	export MEGALIB
+	
+megalib: $(FINAL_BUILD_TARGETS)
 
 print-make-info: FORCE
 	@echo " "
@@ -239,7 +252,8 @@ doxygen: FORCE
 	cd ${GENIE}
 
 
-apps: $(INITIAL_BUILD_TARGETS) FORCE
+#~ apps: $(INITIAL_BUILD_TARGETS) FORCE
+apps: megalib-create FORCE
 	@echo " "
 	@echo "** Building GENIE applications..."
 	cd ${GENIE}/src/Apps && \

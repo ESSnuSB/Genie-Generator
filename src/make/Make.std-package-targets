@@ -74,9 +74,10 @@ else
                     -I../include/GENIE/Interfaces \
                     -inlineInputHeader \
                     -s $(PACKAGE_LIBNOVRS) \
-                  -rml $(PACKAGE_PCM) \
+                  -rml libGenie.so \
                   -rmf $(PACKAGE_ROOTMAP) \
                   $(ROOT_DICT_GEN_INCLUDES) $(DICTGEN_HEADERS) LinkDef.h
+#                  -rml $(PACKAGE_PCM) \
 # clean rootmap output up a bit ... (magic?)
 # -e "s/\.dylib\.so/\.dylib/g" 
 #   order matters here
@@ -87,24 +88,29 @@ else
                      -e "s%Nuclear/NuclearModelI.h%Interfaces/NuclearModelI.h%g" \
 	             -e "s%$(GENIE_LIB_PATH)/%%g" \
 	     $(PACKAGE_ROOTMAP)
+	   
+	   $(COPY) $(PACKAGE_PCM) $(GENIE_LIB_PATH)  
+	   $(COPY) $(PACKAGE_ROOTMAP) $(GENIE_LIB_PATH)
 endif
 
 #
 #
 
 $(PACKAGE_LIB_WITH_PATH): $(LIB_DEPEND)
-	@echo "[package: $(PACKAGE)] Generating shared library ..dictionary=.$(DICTIONARY)"
+	@echo "[package: $(PACKAGE)] Generating shared and static libraries ..dictionary=.$(DICTIONARY)"
 ifeq ($(strip $(DICTIONARY)),undefined)
-	$(SOCMD) $(SOFLAGS) $(SOMINF) $(PACKAGE_OBJECTS) $(EXTRA_EXT_LIBS) $(OutPutOpt) $(PACKAGE_LIB_WITH_PATH)
+	$(SOCMD) $(SOFLAGS) $(SOMINF) $(PACKAGE_OBJECTS) $(LIBRARIES) $(EXTRA_EXT_LIBS) $(OutPutOpt) $(PACKAGE_LIB_WITH_PATH)
 else
-	$(SOCMD) $(SOFLAGS) $(SOMINF) $(PACKAGE_ALL_OBJECTS) $(EXTRA_EXT_LIBS) $(OutPutOpt) $(PACKAGE_LIB_WITH_PATH)
+	$(SOCMD) $(SOFLAGS) $(SOMINF) $(PACKAGE_ALL_OBJECTS) $(LIBRARIES) $(EXTRA_EXT_LIBS) $(OutPutOpt) $(PACKAGE_LIB_WITH_PATH)
 #	[ ! -f $(DICTIONARY_PCM) ] || $(COPY) $(DICTIONARY_PCM) $(GENIE_LIB_PATH)
 #	[ ! -f $(DICTIONARY_ROOTMAP) ] || $(COPY) $(DICTIONARY_ROOTMAP) $(GENIE_LIB_PATH)
 	[ ! -f $(PACKAGE_PCM) ] || $(COPY) $(PACKAGE_PCM) $(GENIE_LIB_PATH)
 	[ ! -f $(PACKAGE_ROOTMAP) ] || $(COPY) $(PACKAGE_ROOTMAP) $(GENIE_LIB_PATH)
 endif
 
-lib: $(PACKAGE_LIB_WITH_PATH)
+lib: $(if $(MEGALIB), , $(PACKAGE_LIB_WITH_PATH))
+	@echo MEGALIB=$(MEGALIB)
+#lib: $(PACKAGE_LIB_WITH_PATH)
 
 $(PACKAGE_LIBMACLINK_WITH_PATH): $(PACKAGE_LIB_WITH_PATH)
 ifeq ($(strip $(IS_MACOSX)),YES)
@@ -120,7 +126,8 @@ endif
 
 #
 #
-lib-link: $(PACKAGE_LIBNOVRS_WITH_PATH) $(PACKAGE_LIBMACLINK_WITH_PATH)
+lib-link: $(if $(MEGALIB), , $(PACKAGE_LIBNOVRS_WITH_PATH) $(PACKAGE_LIBMACLINK_WITH_PATH))
+#lib-link: $(PACKAGE_LIBNOVRS_WITH_PATH) $(PACKAGE_LIBMACLINK_WITH_PATH)
 
 
 #

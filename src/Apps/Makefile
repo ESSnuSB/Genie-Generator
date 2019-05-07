@@ -12,7 +12,8 @@ MAKEFILE = Makefile
 #
 include $(GENIE)/src/make/Make.include
 
-GENIE_LIBS  = $(shell $(GENIE)/src/scripts/setup/genie-config --libs)
+#~ GENIE_LIBS  = $(if $(MEGALIB), -L$(GENIE)/lib -lGenie, $(shell $(GENIE)/src/scripts/setup/genie-config --libs))
+GENIE_LIBS  = -L$(GENIE)/lib -lGenie
 
 # Mac OS X -bind_at_load means we must list the low level libraries
 # first, and each stage must fully resolved before the next library
@@ -79,6 +80,8 @@ TGT = $(addprefix $(GENIE_BIN_PATH)/,$(TGT_BASE))
 find_libs = ${shell ldd $(GENIE_BIN_PATH)/$(1) 2>&1 | sed -n 's/.*=> \(.*\) (.*/\1/pg' | tr '\n' ' '}
 
 all: $(TGT)
+
+megalib: $(TGT)
 
 %.o : %.cxx
 	$(CXX) $(CXXFLAGS) -MMD -MP -c $(CPP_INCLUDES) $< -o $@

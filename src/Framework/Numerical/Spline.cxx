@@ -1,6 +1,6 @@
 //____________________________________________________________________________
 /*
- Copyright (c) 2003-2018, The GENIE Collaboration
+ Copyright (c) 2003-2019, The GENIE Collaboration
  For the full text of the license visit http://copyright.genie-mc.org
  or see $GENIE/LICENSE
 
@@ -125,8 +125,8 @@ TObject()
   this->InitSpline();
   this->BuildSpline(nentries, dblx, dbly);
 
-  delete [] x;
-  delete [] y;
+  delete [] dblx;
+  delete [] dbly;
 }
 //___________________________________________________________________________
 Spline::Spline(const Spline & spline) :

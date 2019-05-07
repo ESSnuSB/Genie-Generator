@@ -10,7 +10,7 @@
 *               Nh+//om   Nh+/yN       o///s                                                                    *
 *              d+//+d   my+/smmyhN    m///h                                      NEUTRINO MONTE CARLO GENERATOR *   
 *            Ns///yN NdyoshNNs///d   h////yN                                                                    *
-*           mo//om        ms///+m   d///////oyhmN                                                 Version 3.0.2 *
+*           mo//om        ms///+m   d///////oyhmN                                                 Version 3.0.4 *
 *          N+//yN       ms////+N    h////////////oym                                                            *
 *          s//h       ho/+///sN     N///////////////od                                  http://www.genie-mc.org *
 *         N+/h     my++yh+//y       s/////////////////oN                                                        *
@@ -33,7 +33,7 @@
 *                    mhso+/:------------------:/+oyhyo/----------:/+syhm                                        *
 *                           NmddhyyyssssyyyhdmmNNNmhhhyyyyhhddmN                                                *
 *                                                                                                               *
-*                                                             Copyright (c) 2003-2018, The GENIE Collaboration  *
+*                                                             Copyright (c) 2003-2019, The GENIE Collaboration  *
 *                                                                                                               *
 *                                                                                                               *
 *            Luis Alvarez-Ruso [8], Costas Andreopoulos [4,6], Christopher Barry [4], Francis Bench [4],        *

@@ -1,6 +1,6 @@
 //____________________________________________________________________________
 /*
- Copyright (c) 2003-2018, The GENIE Collaboration
+ Copyright (c) 2003-2019, The GENIE Collaboration
  For the full text of the license visit http://copyright.genie-mc.org
  or see $GENIE/LICENSE
 
@@ -1001,6 +1001,8 @@ void HAIntranuke2018::Inelastic(
 
 	      ev->AddParticle(*t1);
 	      ev->AddParticle(*t2);
+	      delete t1;
+	      delete t2;
 
 	      return;
 	    }
@@ -1496,6 +1498,7 @@ void HAIntranuke2018::Inelastic(
 	    exception.SetReason("Phase space generation of absorption final state failed");
 	    throw exception;
 	  }
+	  delete p0;
 	}
 	} // end multi-nucleon FS
     }

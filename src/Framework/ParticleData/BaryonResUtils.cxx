@@ -1,6 +1,6 @@
 //____________________________________________________________________________
 /*
- Copyright (c) 2003-2018, The GENIE Collaboration
+ Copyright (c) 2003-2019, The GENIE Collaboration
  For the full text of the license visit http://copyright.genie-mc.org
  or see $GENIE/LICENSE
 
@@ -426,7 +426,7 @@ bool genie::utils::res::IsDelta(Resonance_t res)
 }
 //____________________________________________________________________________
 // The values of resonance mass and width is taken from 
-//  K.A. Olive et al. (Particle Data Group), Chin. Phys. C, 38, 090001 (2014)
+// M. Tanabashi et al. (Particle Data Group) Phys. Rev. D 98, 030001
 bool genie::utils::res::IsN(Resonance_t res)
 {
     return (! utils::res::IsDelta(res) );

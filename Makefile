@@ -57,7 +57,6 @@ megalib: MEGALIB=true
 	export MEGALIB
 	
 megalib: $(FINAL_BUILD_TARGETS)
-#~ megalib: $(INITIAL_BUILD_TARGETS) megalib-create $(FINAL_BUILD_TARGETS)
 
 print-make-info: FORCE
 	@echo " "

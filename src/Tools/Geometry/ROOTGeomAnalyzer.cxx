@@ -196,7 +196,7 @@ const PathLengthList & ROOTGeomAnalyzer::ComputeMaxPathLengths(void)
   LOG("GROOTGeom", pNOTICE)
      << "Computing the maximum path lengths for all materials";
 
-  if (!fGeometry) {
+  if (!fGeometry) {  //GEONAV_OK
       LOG("GROOTGeom", pFATAL) << "No ROOT geometry is loaded!!";
       exit(1);
   }
@@ -300,7 +300,7 @@ const TVector3 & ROOTGeomAnalyzer::GenerateVertex(
        << ", 4x (m,s) = " << utils::print::X4AsString(&x);
 #endif
 
-  if (!fGeometry) {
+  if (!fGeometry) { //GEONAV_OK
       LOG("GROOTGeom", pFATAL) << "No ROOT geometry is loaded!!";
       exit(1);
   }
@@ -405,8 +405,8 @@ const TVector3 & ROOTGeomAnalyzer::GenerateVertex(
           << genwgt_dist << " " << walked << " " << wgtstep;
       }
       pos = seg.GetPosition(frac);
-      fGeometry -> SetCurrentPoint (pos[0],pos[1],pos[2]);
-      fGeometry -> FindNode();
+      fGeometry -> SetCurrentPoint (pos[0],pos[1],pos[2]); //GEONAV_OK
+      fGeometry -> FindNode(); //GEONAV_OK
       LOG("GROOTGeom", pINFO)
         << "Choose vertex position in " << seg.fVolume->GetName() << " "
          << utils::print::Vec3AsString(&pos);
@@ -417,8 +417,8 @@ const TVector3 & ROOTGeomAnalyzer::GenerateVertex(
 
   LOG("GROOTGeom", pNOTICE)
      << "The vertex was placed in volume: " 
-     << fGeometry->GetCurrentVolume()->GetName()
-     << ", path: " << fGeometry->GetPath();
+     << fGeometry->GetCurrentVolume()->GetName() //GEONAV_OK
+     << ", path: " << fGeometry->GetPath(); //GEONAV_OK
 
   // warn for any volume overshoots
   bool ok = this->FindMaterialInCurrentVol(tgtpdg);
@@ -524,7 +524,7 @@ void ROOTGeomAnalyzer::SetTopVolName(string name)
   fTopVolumeName = name;
   LOG("GROOTGeom",pNOTICE) << "Geometry Top Volume name: " << fTopVolumeName;
 
-  TGeoVolume * gvol = fGeometry->GetVolume(fTopVolumeName.c_str());
+  TGeoVolume * gvol = fGeometry->GetVolume(fTopVolumeName.c_str()); //GEONAV_OK_NA
   if (!gvol) {
      LOG("GROOTGeom",pWARN) << "Could not find volume: " << name.c_str();
      LOG("GROOTGeom",pWARN) << "Will not change the current top volume";
@@ -540,7 +540,7 @@ void ROOTGeomAnalyzer::SetTopVolName(string name)
   // the specified top volume (whereas GENIE assumes that the global reference 
   // frame is that of the master volume)
 
-  TGeoIterator next(fGeometry->GetMasterVolume());
+  TGeoIterator next(fGeometry->GetMasterVolume()); //GEONAV_OK_NA
   TGeoNode *node;
   TString nodeName, volNameStr;
   const char* volName = fTopVolumeName.c_str();
@@ -556,7 +556,7 @@ void ROOTGeomAnalyzer::SetTopVolName(string name)
 
   // set volume name
   fTopVolume = gvol;
-  fGeometry->SetTopVolume(fTopVolume);
+  fGeometry->SetTopVolume(fTopVolume); //GEONAV_OK
 }
 
 //===========================================================================
@@ -787,12 +787,12 @@ void ROOTGeomAnalyzer::Load(TGeoManager * gm)
 
   LOG("GROOTGeom", pNOTICE)
          << "A TGeoManager is being loaded to the geometry driver";
-  fGeometry = gm;
+  fGeometry = gm; //GEONAV_OK_NA
 
-  if (!fGeometry) {
+  if (!fGeometry) { //GEONAV_OK
     LOG("GROOTGeom", pFATAL) << "Null TGeoManager! Aborting";
   }
-  assert(fGeometry);
+  assert(fGeometry); //GEONAV_OK
 
   this->BuildListOfTargetNuclei();
 
@@ -805,20 +805,20 @@ void ROOTGeomAnalyzer::Load(TGeoManager * gm)
   fCurrVertex            = new TVector3(0.,0.,0.);
 
   // ask geometry manager for its top volume
-  fTopVolume = fGeometry->GetTopVolume();
+  fTopVolume = fGeometry->GetTopVolume(); //GEONAV_OK_NA
   if (!fTopVolume) {
       LOG("GROOTGeom", pFATAL) << "Could not get top volume!!!";
   }
   assert(fTopVolume);
 
   // load matrix (identity) of top volume
-  fMasterToTop = new TGeoHMatrix(*fGeometry->GetCurrentMatrix());
+  fMasterToTop = new TGeoHMatrix(*fGeometry->GetCurrentMatrix()); //GEONAV_OK_NA
   fMasterToTopIsIdentity = true;
 
 //#define PRINT_MATERIALS
 #ifdef PRINT_MATERIALS
-  fGeometry->GetListOfMaterials()->Print();
-  fGeometry->GetListOfMedia()->Print();
+  fGeometry->GetListOfMaterials()->Print(); //GEONAV_NO
+  fGeometry->GetListOfMedia()->Print(); //GEONAV_NO
 #endif
 
 }
@@ -834,12 +834,12 @@ void ROOTGeomAnalyzer::BuildListOfTargetNuclei(void)
 
   fCurrPDGCodeList = new PDGCodeList;
 
-  if (!fGeometry) {
+  if (!fGeometry) { //GEONAV_OK
     LOG("GROOTGeom", pFATAL) << "No ROOT geometry is loaded!!";
     exit(1);
   }
 
-  TObjArray * volume_list = fGeometry->GetListOfVolumes();
+  TObjArray * volume_list = fGeometry->GetListOfVolumes(); //GEONAV_NO
   if (!volume_list) {
      LOG("GROOTGeom", pERROR)
         << "Null list of geometry volumes. Can not find build target list!";
@@ -1440,38 +1440,38 @@ void ROOTGeomAnalyzer::SwimOnce(const TVector3 & r0, const TVector3 & udir)
     << "] udir [" << udir[0] << "," << udir[1] << "," << udir[2];
 #endif
 
-  fGeometry -> SetCurrentDirection (udir[0],udir[1],udir[2]);
-  fGeometry -> SetCurrentPoint     (r0[0],  r0[1],  r0[2]  );
+  fGeometry -> SetCurrentDirection (udir[0],udir[1],udir[2]); //GEONAV_OK
+  fGeometry -> SetCurrentPoint     (r0[0],  r0[1],  r0[2]  ); //GEONAV_OK
 
   while (!found_vol || keep_on) {
      keep_on = true;
 
-     fGeometry->FindNode();
+     fGeometry->FindNode(); //GEONAV_OK
 
-     ps_curr.SetEnter( fGeometry->GetCurrentPoint() , raydist );
-     vol = fGeometry->GetCurrentVolume();
+     ps_curr.SetEnter( fGeometry->GetCurrentPoint() , raydist ); //GEONAV_OK
+     vol = fGeometry->GetCurrentVolume(); //GEONAV_OK
      med = vol->GetMedium();
      mat = med->GetMaterial();
      ps_curr.SetGeo(vol,med,mat);
 #ifdef PATHSEG_KEEP_PATH
-     if (fill_path) ps_curr.SetPath(fGeometry->GetPath());
+     if (fill_path) ps_curr.SetPath(fGeometry->GetPath()); //GEONAV_OK
 #endif
 
 #ifdef __GENIE_LOW_LEVEL_MESG_ENABLED__
 #ifdef DUMP_SWIM
        LOG("GROOTGeom", pDEBUG) << "Current volume: " << vol->GetName()
-                             << " pos " << fGeometry->GetCurrentPoint()[0]
-                             << " "     << fGeometry->GetCurrentPoint()[1]
-                             << " "     << fGeometry->GetCurrentPoint()[2]
-                             << " dir " << fGeometry->GetCurrentDirection()[0]
-                             << " "     << fGeometry->GetCurrentDirection()[1]
-                             << " "     << fGeometry->GetCurrentDirection()[2]
-                             << "[path: " << fGeometry->GetPath() << "]";
+                             << " pos " << fGeometry->GetCurrentPoint()[0] //GEONAV_OK
+                             << " "     << fGeometry->GetCurrentPoint()[1] //GEONAV_OK
+                             << " "     << fGeometry->GetCurrentPoint()[2] //GEONAV_OK
+                             << " dir " << fGeometry->GetCurrentDirection()[0] //GEONAV_OK
+                             << " "     << fGeometry->GetCurrentDirection()[1] //GEONAV_OK
+                             << " "     << fGeometry->GetCurrentDirection()[2] //GEONAV_OK
+                             << "[path: " << fGeometry->GetPath() << "]"; //GEONAV_OK
 #endif
 #endif
 
      // find the start of top
-     if (fGeometry->IsOutside() || !vol) {
+     if (fGeometry->IsOutside() || !vol) { //GEONAV_NO_?
         keep_on = false;
         if (found_vol) break;
         step = 0;
@@ -1485,7 +1485,7 @@ void ROOTGeomAnalyzer::SwimOnce(const TVector3 & r0, const TVector3 & udir)
 #endif
 #endif
 
-        while (!fGeometry->IsEntering()) {
+        while (!fGeometry->IsEntering()) { //GEONAV_OK_?
           step = this->Step();
           raydist += step;
 #ifdef RWH_DEBUG
@@ -1633,15 +1633,15 @@ bool ROOTGeomAnalyzer::FindMaterialInCurrentVol(int tgtpdg)
 //___________________________________________________________________________
 double ROOTGeomAnalyzer::StepToNextBoundary(void)
 {
-  fGeometry->FindNextBoundary();
-  double step=fGeometry->GetStep();
+  fGeometry->FindNextBoundary(); //GEONAV_OK
+  double step=fGeometry->GetStep(); //GEONAV_OK
   return step;
 }
 //___________________________________________________________________________
 double ROOTGeomAnalyzer::Step(void)
 {
-  fGeometry->Step();
-  double step=fGeometry->GetStep();
+  fGeometry->Step(); //GEONAV_OK
+  double step=fGeometry->GetStep(); //GEONAV_OK
   return step;
 }
 //___________________________________________________________________________
@@ -1650,14 +1650,14 @@ double ROOTGeomAnalyzer::StepUntilEntering(void)
   this->StepToNextBoundary();  // doesn't actually step, so don't include in sum
   double step = 0; // 
 
-  while(!fGeometry->IsEntering()) {
+  while(!fGeometry->IsEntering()) { //GEONAV_OK_?
     step += this->Step();
   }
 
 #ifdef __GENIE_LOW_LEVEL_MESG_ENABLED__
 
-  bool isen = fGeometry->IsEntering();
-  bool isob = fGeometry->IsOnBoundary();
+  bool isen = fGeometry->IsEntering(); //GEONAV_OK_?
+  bool isob = fGeometry->IsOnBoundary(); //GEONAV_OK_?
 
   LOG("GROOTGeom",pDEBUG)
       << "IsEntering = "     << utils::print::BoolAsYNString(isen)

@@ -13,7 +13,7 @@
 
 \created  April 19, 2018
 
-\cpright  Copyright (c) 2003-2018, The GENIE Collaboration
+\cpright  Copyright (c) 2003-2019, The GENIE Collaboration
           For the full text of the license visit http://copyright.genie-mc.org
           or see $GENIE/LICENSE
 */
@@ -74,6 +74,8 @@ public:
   string Tail            (void) const ;
   string CMCDirectory    (void) const ;
   string TuneDirectory   (void) const ;
+  string BaseDirectory   (void) const { return fBaseDirectory; }
+  string CustomSource    (void) const { return fCustomSource;  }
 
   void   Build   (const string & name = "" ) ;
   void   Decode  (string id_str);

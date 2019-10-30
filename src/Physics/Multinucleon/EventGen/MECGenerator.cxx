@@ -1,6 +1,6 @@
 //____________________________________________________________________________
 /*
- Copyright (c) 2003-2018, The GENIE Collaboration
+ Copyright (c) 2003-2019, The GENIE Collaboration
  For the full text of the license visit http://copyright.genie-mc.org
  or see $GENIE/LICENSE
 
@@ -242,7 +242,7 @@ void MECGenerator::SelectEmpiricalKinematics(GHepRecord * event) const
   double Wmin  =  1.88;
   double Wmax  =  3.00;
 
-  // Scan phase-space for the maximum differential cross section 
+  // Scan phase-space for the maximum differential cross section
   // at the current neutrino energy
   const int nq=30;
   const int nw=20;
@@ -253,8 +253,8 @@ void MECGenerator::SelectEmpiricalKinematics(GHepRecord * event) const
     for(int iq=0; iq<nq; iq++) {
       double Q2 = Q2min + iq*dQ2;
       double W  = Wmin  + iw*dW;
-      interaction->KinePtr()->SetQ2(Q2);  
-      interaction->KinePtr()->SetW (W);   
+      interaction->KinePtr()->SetQ2(Q2);
+      interaction->KinePtr()->SetW (W);
       double xsec = fXSecModel->XSec(interaction, kPSWQ2fE);
       xsec_max = TMath::Max(xsec, xsec_max);
     }
@@ -300,7 +300,8 @@ void MECGenerator::SelectEmpiricalKinematics(GHepRecord * event) const
  	//  More accurate calculation of the mass of the cluster than 2*Mnucl
  	int nucleon_cluster_pdg = interaction->InitState().Tgt().HitNucPdg();
  	double M2n = PDGLibrary::Instance()->Find(nucleon_cluster_pdg)->Mass(); 
- 	kinematics::WQ2toXY(Ev,M2n,gW,gQ2,gx,gy);
+        //bool is_em = interaction->ProcInfo().IsEM();
+        kinematics::WQ2toXY(Ev,M2n,gW,gQ2,gx,gy);
 
         LOG("MEC", pINFO) << "x = " << gx << ", y = " << gy;
         // lock selected kinematics & clear running values
@@ -322,12 +323,12 @@ void MECGenerator::AddFinalStateLepton(GHepRecord * event) const
 //
   Interaction * interaction = event->Summary();
 
-  // apapadop: The boost back to the lab frame was missing, that is included now with the introduction of the beta factor
+  // The boost back to the lab frame was missing, that is included now with the introduction of the beta factor
   const InitialState & init_state = interaction->InitState();
   const TLorentzVector & pnuc4 = init_state.Tgt().HitNucP4(); //[@LAB]
   TVector3 beta = pnuc4.BoostVector();
 
-  // apapadop: Boosting the incoming neutrino to the NN-cluster rest frame
+  // Boosting the incoming neutrino to the NN-cluster rest frame
   // Neutrino 4p
   TLorentzVector * p4v = event->Probe()->GetP4(); // v 4p @ LAB
   p4v->Boost(-1.*beta);                           // v 4p @ NN-cluster rest frame
@@ -358,7 +359,7 @@ void MECGenerator::AddFinalStateLepton(GHepRecord * event) const
   double plty = plt * TMath::Sin(phi);
 
   // Take a unit vector along the neutrino direction
-  // apapadop: WE NEED THE UNIT VECTOR ALONG THE NEUTRINO DIRECTION IN THE NN-CLUSTER REST FRAME, NOT IN THE LAB FRAME
+  // WE NEED THE UNIT VECTOR ALONG THE NEUTRINO DIRECTION IN THE NN-CLUSTER REST FRAME, NOT IN THE LAB FRAME
  TVector3 unit_nudir = p4v->Vect().Unit();      //We use this one, which is in the NN-cluster rest frame
   // Rotate lepton momentum vector from the reference frame (x'y'z') where 
   // {z':(neutrino direction), z'x':(theta plane)} to the LAB
@@ -368,7 +369,7 @@ void MECGenerator::AddFinalStateLepton(GHepRecord * event) const
   // Lepton 4-momentum in LAB
   TLorentzVector p4l(p3l,El);
 
-  // apapadop: Boost final state primary lepton to the lab frame
+  // Boost final state primary lepton to the lab frame
   p4l.Boost(beta); // active Lorentz transform
 
   // Figure out the final-state primary lepton PDG code
@@ -849,7 +850,7 @@ void MECGenerator::SelectNSVLeptonKinematics (GHepRecord * event) const
   Q2 = Q3*Q3 - Q0*Q0;
   double gy = Q0 / Enu;
   double gx = kinematics::Q2YtoX(Enu, 2 * kNucleonMass, Q2, gy);
-  double gW = kinematics::XYtoW(Enu, 2 * kNucleonMass, gx, gy);
+  double gW = kinematics::XYtoW(Enu, 2 * kNucleonMass, gx, gy); 
 
   interaction->KinePtr()->SetQ2(Q2, true);
   interaction->KinePtr()->Sety(gy, true);

@@ -1,6 +1,6 @@
 //____________________________________________________________________________
 /*
- Copyright (c) 2003-2018, The GENIE Collaboration
+ Copyright (c) 2003-2019, The GENIE Collaboration
  For the full text of the license visit http://copyright.genie-mc.org
  or see $GENIE/LICENSE
 
@@ -133,7 +133,7 @@ EventRecord * PhysInteractionSelector::SelectInteraction
            const ProcessInfo & proc  = interaction->ProcInfo();
            // choose ref frame ('Lab' or 'Hit nucleon rest frame')
            RefFrame_t frame = 
-              (proc.IsCoherent() || proc.IsElectronScattering()) ? 
+              (proc.IsCoherentProduction() || proc.IsElectronScattering()) ? 
               kRfLab : kRfHitNucRest;
            double E = init.ProbeE(frame);
            if(TMath::IsNaN(E)) {

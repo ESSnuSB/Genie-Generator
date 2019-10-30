@@ -1,6 +1,6 @@
 //____________________________________________________________________________
 /*
- Copyright (c) 2003-2018, The GENIE Collaboration
+ Copyright (c) 2003-2019, The GENIE Collaboration
  For the full text of the license visit http://copyright.genie-mc.org
  or see $GENIE/LICENSE
 
@@ -94,14 +94,14 @@ bool ProcessInfo::IsResonant(void) const
   return (fScatteringType == kScResonant);
 }
 //____________________________________________________________________________
-bool ProcessInfo::IsCoherent(void) const
+bool ProcessInfo::IsCoherentProduction(void) const
 {
-  return (fScatteringType == kScCoherent);
+  return (fScatteringType == kScCoherentProduction);
 }
 //____________________________________________________________________________
-bool ProcessInfo::IsCoherentElas(void) const
+bool ProcessInfo::IsCoherentElastic(void) const
 {
-  return (fScatteringType == kScCoherentElas);
+  return (fScatteringType == kScCoherentElastic);
 }
 //____________________________________________________________________________
 bool ProcessInfo::IsElectronScattering(void) const

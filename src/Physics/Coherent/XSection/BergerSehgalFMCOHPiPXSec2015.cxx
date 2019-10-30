@@ -1,6 +1,6 @@
 //____________________________________________________________________________
 /*
-   Copyright (c) 2003-2018, The GENIE Collaboration
+   Copyright (c) 2003-2019, The GENIE Collaboration
    For the full text of the license visit http://copyright.genie-mc.org
    or see $GENIE/LICENSE
 
@@ -273,7 +273,7 @@ bool BergerSehgalFMCOHPiPXSec2015::ValidProcess(const Interaction * interaction)
 
     int nu = init_state.ProbePdg();
 
-    if (!proc_info.IsCoherent())  return false;
+    if (!proc_info.IsCoherentProduction())  return false;
     if (!proc_info.IsWeak())      return false;
     if (target.HitNucIsSet())     return false;
     if (!(target.A()>1))          return false;
